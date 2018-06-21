@@ -1,0 +1,167 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+    <title>Spacebrew Button (Boolean Example)</title>
+
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="css/reset.css" type="text/css" media="screen" charset="utf-8" />
+    <link rel="stylesheet" href="css/style.css" type="text/css" media="screen" charset="utf-8" />
+
+	<script type="text/javascript" src="js/sb-1.4.1.js"></script>
+    <script type="text/javascript">
+    	window.onload = function(){
+    		setup();
+    	}
+	      
+		// Spacebrew Object
+		var sb, 
+			app_name = "Data Trail";
+		/**
+	     * setup Configure spacebrew connection and adds the mousedown listener.
+	     */
+		function setup (){
+			// we make a random name, which allows you connect more than one
+			// of this example from the same computer
+			// passing the "name" argument in a query string overrides this!
+			var random_id = "0000" + Math.floor(Math.random() * 10000);
+			app_name = app_name + ' ' + random_id.substring(random_id.length-4);
+			// create spacebrew client object
+			sb = new Spacebrew.Client({reconnect:true});
+			// set the base description
+			sb.name(app_name);
+			sb.description("This spacebrew client sends and receives boolean messages.");
+			// configure the publication and subscription feeds
+            sb.addPublish( "redPress", "boolean", "false" );
+            sb.addPublish( "greenPress", "boolean", "false" );
+            sb.addPublish( "bluePress", "boolean", "false" );
+
+			sb.addSubscribe( "toggleBackground", "boolean" );
+			// override Spacebrew events - this is how you catch events coming from Spacebrew
+			sb.onBooleanMessage = onBooleanMessage;
+			sb.onOpen = onOpen;
+			// connect to spacbrew
+            sb.connect();
+            
+            // listen to the mouse 
+            //RED BUTTON
+			var button = document.getElementById("redButton");
+			button.addEventListener("mouseup", onRedButtonPress);
+			button.addEventListener("mousedown", onRedButtonRelease);
+			button.addEventListener("touchstart", onRedButtonPress);
+            button.addEventListener("touchend", onRedButtonRelease);
+            
+            var button = document.getElementById("greenButton");
+			button.addEventListener("mouseup", onGreenButtonPress);
+			button.addEventListener("mousedown", onGreenButtonRelease);
+			button.addEventListener("touchstart", onGreenButtonPress);
+            button.addEventListener("touchend", onGreenButtonRelease);
+            
+            var button = document.getElementById("blueButton");
+			button.addEventListener("mouseup", onBlueButtonPress);
+			button.addEventListener("mousedown", onBlueButtonRelease);
+			button.addEventListener("touchstart", onBlueButtonPress);
+			button.addEventListener("touchend", onBlueButtonRelease);
+		}	
+		/**
+		 * Function that is called when Spacebrew connection is established
+		 */
+		function onOpen() {
+			var message = "Connected as <strong>" + sb.name() + "</strong>. ";
+			if (sb.name() === app_name) {
+				message += "<br>You can customize this app's name in the query string <br>by adding <strong>name=your_app_name</strong>."
+			}
+			var nameElement = document.getElementById("name");
+			nameElement.innerHTML = message;
+		}
+		/**
+	     * Function that is called whenever the button is pressed.  
+	     * @param  {Event object} evt Holds information about the button press event
+	     */
+         function onRedButtonPress (evt){
+			// this line prevents the event being called twice
+			// on mobile 
+			evt.preventDefault(); 
+	      	console.log("[onRedButtonPress] button has been pressed"); 
+	        sb.send("redPress", "boolean", "true");
+		}
+		/**
+	     * Function that is called whenever the button is released.  
+	     * @param  {Event object} evt Holds information about the button press event
+	     */
+		function onRedButtonRelease (evt){
+			// this line prevents the event being called twice
+			// on mobile 
+			evt.preventDefault(); 
+	      	console.log("[onRedButtonRelease] button has been released"); 
+	        sb.send("redPress", "boolean", "false");
+        }
+        
+
+        function onGreenButtonPress (evt){
+			// this line prevents the event being called twice
+			// on mobile 
+			evt.preventDefault(); 
+	      	console.log("[onGreenButtonPress] button has been pressed"); 
+	        sb.send("greenPress", "boolean", "true");
+		}
+		/**
+	     * Function that is called whenever the button is released.  
+	     * @param  {Event object} evt Holds information about the button press event
+	     */
+		function onGreenButtonRelease (evt){
+			// this line prevents the event being called twice
+			// on mobile 
+			evt.preventDefault(); 
+	      	console.log("[onGreenButtonRelease] button has been released"); 
+	        sb.send("greenPress", "boolean", "false");
+        }
+        
+        function onBlueButtonPress (evt){
+			// this line prevents the event being called twice
+			// on mobile 
+			evt.preventDefault(); 
+	      	console.log("[onBlueButtonPress] button has been pressed"); 
+	        sb.send("bluePress", "boolean", "true");
+		}
+		/**
+	     * Function that is called whenever the button is released.  
+	     * @param  {Event object} evt Holds information about the button press event
+	     */
+		function onBlueButtonRelease (evt){
+			// this line prevents the event being called twice
+			// on mobile 
+			evt.preventDefault(); 
+	      	console.log("[onBlueButtonRelease] button has been released"); 
+	        sb.send("bluePress", "boolean", "false");
+		}
+		/**
+		 * onBooleanMessage Function that is called whenever new spacebrew boolean messages are received.
+		 *          It accepts two parameters:
+		 * @param  {String} name    Holds name of the subscription feed channel
+		 * @param  {Boolean} value  Holds value received from the subscription feed
+		 */
+		function onBooleanMessage( name, value ){
+			console.log("[onBooleanMessage] boolean message received ", value);
+			if (value) {
+		        document.body.style.background = "rgb(100,255,100)"; 
+			} else {
+		        document.body.style.background = "rgb(220,220,220)"; 				
+			}
+		}
+	</script>
+	</head>
+
+	<body>
+		<div id="container">
+			<h1><span>Click to send</span><br>a message to Spacebrew</h1>
+            <a class="button red" id="redButton">Red Press</a>
+            <a class="button green" id="greenButton">Green Press</a>
+            <a class="button blue" id="blueButton">Blue Press</a>
+
+
+			</br>
+			<div id="name">Trying to connect</div>
+		</div>
+	</body>
+
+</html>
