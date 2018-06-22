@@ -177,7 +177,7 @@ Spacebrew.Client = function( server, name, description, options ){
 	 * Spacebrew server to which the app will connect
 	 * @type {String}
 	 */
-	this.server = server || "ciidspacebrew.local";
+	this.server = server || "sandbox.spacebrew.cc";
 	if (window) {
 		this.server = (window.getQueryString("server") !== "" ? unescape(window.getQueryString("server")) : this.server);
 	}
@@ -231,7 +231,7 @@ Spacebrew.Client = function( server, name, description, options ){
  */
 Spacebrew.Client.prototype.connect = function(){
 	try {
-		this.socket				= new WebSocket("wss://" + this.server + ":" + this.port);
+		this.socket				= new WebSocket("ws://" + this.server + ":" + this.port);
 		this.socket.binaryType	= "arraybuffer";
 		this.socket.onopen		= this._onOpen.bind(this);
 		this.socket.onmessage	= this._onMessage.bind(this);
