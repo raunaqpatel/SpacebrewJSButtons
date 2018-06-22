@@ -186,7 +186,7 @@ Spacebrew.Client = function( server, name, description, options ){
 	 * Port number on which Spacebrew server is running
 	 * @type {Integer}
 	 */
-	this.port = options.port || 443;
+	this.port = options.port || 9000;
 	if (window) {
 		var port = window.getQueryString("port");
 		if (port !== "" && !isNaN(port)) {
@@ -231,7 +231,7 @@ Spacebrew.Client = function( server, name, description, options ){
  */
 Spacebrew.Client.prototype.connect = function(){
 	try {
-		this.socket				= new WebSocket("wss://" + this.server + ":" + this.port);
+		this.socket				= new WebSocket("ws://" + this.server + ":" + this.port);
 		this.socket.binaryType	= "arraybuffer";
 		this.socket.onopen		= this._onOpen.bind(this);
 		this.socket.onmessage	= this._onMessage.bind(this);
