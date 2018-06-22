@@ -186,7 +186,7 @@ Spacebrew.Client = function( server, name, description, options ){
 	 * Port number on which Spacebrew server is running
 	 * @type {Integer}
 	 */
-	this.port = options.port || 9000;
+	this.port = options.port || 80;
 	if (window) {
 		var port = window.getQueryString("port");
 		if (port !== "" && !isNaN(port)) {
